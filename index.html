@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>小小科學家｜身體、天氣與生活探索</title>
+  <link rel="stylesheet" href="utilities.css">
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#F59E0B" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="text-slate-800 pb-12">
+
+  <!-- Top Navigation Bar -->
+  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b-4 border-amber-300 px-3 sm:px-6 py-2.5">
+    <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <!-- Brand / Home Button -->
+      <button id="navHomeBtn" type="button" class="flex items-center gap-2.5 text-left group focus:outline-none">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-2xl shadow-md group-hover:scale-105 transition">
+          🦉
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <span class="font-black text-lg sm:text-xl text-slate-900 tracking-tight">小小科學家</span>
+            <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">5-7歲專區</span>
+          </div>
+          <p class="text-xs text-slate-500 font-medium hidden sm:block">先猜・動手比較・說說發現</p>
+        </div>
+      </button>
+
+      <!-- Action Toolbar -->
+      <div class="flex items-center gap-2">
+        <!-- Stars / Badges Counter -->
+        <button id="openPassportBtn" type="button" class="kid-btn bg-amber-100 hover:bg-amber-200 border-2 border-amber-400 px-3 py-1.5 flex items-center gap-1.5 text-amber-900 font-extrabold text-sm">
+          <span class="text-lg">🏅</span>
+          <span>實驗徽章</span>
+          <span id="badgeCountText" class="bg-amber-400 text-white px-2 py-0.5 rounded-full text-xs">0/4</span>
+        </button>
+
+        <!-- Sound / Voice Toggle -->
+        <button id="toggleAudioBtn" type="button" class="kid-btn bg-sky-100 hover:bg-sky-200 border-2 border-sky-400 px-3 py-1.5 flex items-center gap-1 text-sky-900 font-extrabold text-sm" aria-label="切換音效與語音">
+          <span id="audioIcon" class="text-lg">🔊</span>
+          <span id="audioLabel" class="hidden sm:inline">聲音開</span>
+        </button>
+
+        <!-- Parent Guide Button -->
+        <button id="openParentModalBtn" type="button" class="kid-btn bg-emerald-100 hover:bg-emerald-200 border-2 border-emerald-400 px-3 py-1.5 flex items-center gap-1 text-emerald-900 font-extrabold text-sm">
+          <span class="text-lg">👨‍👩‍👧</span>
+          <span class="hidden md:inline">爸媽引導</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-5xl mx-auto px-3 sm:px-6 pt-5 space-y-6">
+<section id="discoveryHub"></section><section id="discoveryTopic" hidden></section><div id="experimentApp">
+
+    <!-- Dr. Kiki Interactive Speech Banner -->
+    <section class="kid-card bg-white border-4 border-amber-300 p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-4 relative overflow-hidden">
+      <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-amber-100/60 rounded-full pointer-events-none"></div>
+      <!-- Mascot SVG -->
+      <div class="mascot-float shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-b from-sky-100 to-amber-100 border-4 border-amber-400 flex items-center justify-center shadow-inner">
+        <svg viewBox="0 0 100 100" class="w-16 h-16 sm:w-20 sm:h-20" aria-hidden="true">
+          <!-- Owl Body -->
+          <ellipse cx="50" cy="58" rx="30" ry="28" fill="#F59E0B" />
+          <ellipse cx="50" cy="63" rx="20" ry="20" fill="#FEF3C7" />
+          <!-- Ears -->
+          <polygon points="24,38 32,20 42,34" fill="#D97706" />
+          <polygon points="76,38 68,20 58,34" fill="#D97706" />
+          <!-- Safety Goggles Strap -->
+          <rect x="18" y="40" width="64" height="7" rx="3" fill="#0284C7" />
+          <!-- Goggles & Eyes -->
+          <circle cx="38" cy="44" r="13" fill="#E0F2FE" stroke="#0284C7" stroke-width="4" />
+          <circle cx="62" cy="44" r="13" fill="#E0F2FE" stroke="#0284C7" stroke-width="4" />
+          <circle cx="38" cy="44" r="5.5" fill="#1E293B" />
+          <circle cx="62" cy="44" r="5.5" fill="#1E293B" />
+          <circle cx="40" cy="42" r="2" fill="#FFFFFF" />
+          <circle cx="64" cy="42" r="2" fill="#FFFFFF" />
+          <!-- Beak -->
+          <polygon points="46,52 54,52 50,60" fill="#EA580C" />
+          <!-- Lab Coat Collar -->
+          <path d="M26,72 L42,84 L50,74 L58,84 L74,72 L78,86 L22,86 Z" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2" />
+        </svg>
+      </div>
+
+      <!-- Speech Content -->
+      <div class="flex-1 text-center sm:text-left space-y-2 z-10">
+        <div class="inline-flex items-center gap-1.5 bg-amber-100 text-amber-900 text-xs font-extrabold px-2.5 py-1 rounded-full">
+          <span>✨ 小小科學家的探索任務</span>
+        </div>
+        <p id="kikiSpeechText" class="text-base sm:text-lg font-extrabold text-slate-800 leading-relaxed">
+          嗨！歡迎來到小小科學家！今天想玩哪一個神奇的科學魔法呢？點選卡片就能開始囉！
+        </p>
+      </div>
+
+      <!-- Speak Aloud Button -->
+      <button id="speakKikiBtn" type="button" class="kid-btn shrink-0 bg-amber-400 hover:bg-amber-500 text-slate-900 font-black px-4 py-3 flex items-center gap-2 text-sm sm:text-base z-10">
+        <span class="text-xl">🗣️</span>
+        <span>唸給我聽</span>
+      </button>
+    </section>
+
+    <!-- Experiment Selector Tabs (Always accessible for quick switching) -->
+    <nav aria-label="選擇科學實驗" class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <button type="button" data-exp-id="volcano" class="exp-tab-btn kid-card p-3.5 text-left border-4 transition flex items-center gap-3 bg-rose-50 border-rose-400">
+        <span class="text-3xl sm:text-4xl shrink-0">🌋</span>
+        <div class="min-w-0">
+          <div class="flex items-center gap-1">
+            <span class="font-black text-sm sm:text-base text-rose-900 truncate">彩虹火山爆發</span>
+            <span id="tabBadge-volcano" class="hidden text-sm">⭐</span>
+          </div>
+          <span class="text-xs font-bold text-rose-700 block">酸鹼氣泡魔法</span>
+        </div>
+      </button>
+
+      <button type="button" data-exp-id="egg" class="exp-tab-btn kid-card p-3.5 text-left border-4 transition flex items-center gap-3 bg-white border-sky-200 hover:border-sky-400">
+        <span class="text-3xl sm:text-4xl shrink-0">🥚</span>
+        <div class="min-w-0">
+          <div class="flex items-center gap-1">
+            <span class="font-black text-sm sm:text-base text-sky-900 truncate">游泳的魔法蛋</span>
+            <span id="tabBadge-egg" class="hidden text-sm">⭐</span>
+          </div>
+          <span class="text-xs font-bold text-sky-700 block">鹽水浮力秘密</span>
+        </div>
+      </button>
+
+      <button type="button" data-exp-id="milk" class="exp-tab-btn kid-card p-3.5 text-left border-4 transition flex items-center gap-3 bg-white border-purple-200 hover:border-purple-400">
+        <span class="text-3xl sm:text-4xl shrink-0">🎨</span>
+        <div class="min-w-0">
+          <div class="flex items-center gap-1">
+            <span class="font-black text-sm sm:text-base text-purple-900 truncate">牛奶跳舞彩虹</span>
+            <span id="tabBadge-milk" class="hidden text-sm">⭐</span>
+          </div>
+          <span class="text-xs font-bold text-purple-700 block">表面張力煙火</span>
+        </div>
+      </button>
+
+      <button type="button" data-exp-id="static" class="exp-tab-btn kid-card p-3.5 text-left border-4 transition flex items-center gap-3 bg-white border-amber-200 hover:border-amber-400">
+        <span class="text-3xl sm:text-4xl shrink-0">🎈</span>
+        <div class="min-w-0">
+          <div class="flex items-center gap-1">
+            <span class="font-black text-sm sm:text-base text-amber-900 truncate">氣球吸紙花</span>
+            <span id="tabBadge-static" class="hidden text-sm">⭐</span>
+          </div>
+          <span class="text-xs font-bold text-amber-700 block">靜電刺刺魔法</span>
+        </div>
+      </button>
+    </nav>
+
+    <!-- Mode Switcher: 1. 猜一猜 & 虛擬實驗室  |  🏠 材料與步驟步驟  |  3. 科學小問答 -->
+    <div class="bg-white/80 p-2 rounded-2xl border-2 border-slate-200 flex flex-wrap gap-2 justify-center sm:justify-between items-center">
+      <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+        <button type="button" data-mode="mission" class="mode-btn kid-btn mission-nav">🌱 親子探索任務</button>
+        <button type="button" data-mode="lab" class="mode-btn kid-btn flex-1 sm:flex-initial px-4 py-2.5 font-black text-sm sm:text-base flex items-center justify-center gap-2 bg-indigo-600 text-white">
+          <span>🧪</span>
+          <span>🧪 模擬練習</span>
+        </button>
+        <button type="button" data-mode="steps" class="mode-btn kid-btn flex-1 sm:flex-initial px-4 py-2.5 font-black text-sm sm:text-base flex items-center justify-center gap-2 bg-white text-slate-700 border-2 border-slate-300">
+          <span>🏠</span>
+          <span>🏠 材料與步驟</span>
+        </button>
+        <button type="button" data-mode="quiz" class="mode-btn kid-btn flex-1 sm:flex-initial px-4 py-2.5 font-black text-sm sm:text-base flex items-center justify-center gap-2 bg-white text-slate-700 border-2 border-slate-300">
+          <span>💡</span>
+          <span>💡 小小回顧</span>
+        </button>
+      </div>
+
+      <div class="text-xs sm:text-sm font-extrabold text-slate-600 px-2 flex items-center gap-1.5">
+        <span>🛡️ 安全等級：</span>
+        <span class="text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-300">真實實驗請大人陪同</span>
+      </div>
+    </div>
+
+    <section id="view-mission" aria-label="親子探索任務"></section>
+    <div id="journey" aria-label="探索流程"></div>
+    <!-- ==================== VIEW 1: VIRTUAL INTERACTIVE LAB ==================== -->
+    <section id="view-lab" class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+      <!-- Left Column: Prediction + Interactive Controls -->
+      <div class="lg:col-span-5 space-y-4">
+        <!-- Step A: Prediction Box -->
+        <div class="kid-card bg-white border-4 border-indigo-200 p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <h2 class="font-black text-base sm:text-lg text-indigo-950 flex items-center gap-2">
+              <span class="text-xl">🤔</span>
+              <span>先猜一猜，不急著找答案</span>
+            </h2>
+            <span id="predictionStatusBadge" class="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">先猜猜看</span>
+          </div>
+          <p id="predictionQuestion" class="text-sm sm:text-base font-bold text-slate-700"></p>
+          <div id="predictionOptions" class="grid grid-cols-1 gap-2"></div>
+          <div id="predictionFeedback" class="hidden p-3 rounded-xl text-sm font-bold"></div>
+        </div>
+
+        <!-- Step B: Experiment Action Controls -->
+        <div class="kid-card bg-white border-4 border-sky-300 p-4 space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="font-black text-base sm:text-lg text-sky-950 flex items-center gap-2">
+              <span class="text-xl">🖐️</span>
+              <span>動手試，觀察變化</span>
+            </h2>
+            <button id="resetLabBtn" type="button" class="kid-btn bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs px-3 py-1.5 border border-slate-300">
+              🔄 重新做一次
+            </button>
+          </div>
+
+          <!-- Dynamic Control Panel per Experiment -->
+          <div id="labControlPanel" class="space-y-3"></div>
+
+          <!-- Live Observation Meter -->
+          <div class="bg-sky-50 rounded-2xl p-3 border-2 border-sky-200 space-y-1.5">
+            <div class="flex items-center justify-between text-xs font-extrabold text-sky-900">
+              <span id="meterLabel">✨ 實驗觀察進度</span>
+              <span id="meterValueText">準備開始！</span>
+            </div>
+            <div class="w-full h-3.5 bg-white rounded-full overflow-hidden border border-sky-300">
+              <div id="meterBar" class="h-full bg-gradient-to-r from-amber-400 via-emerald-400 to-sky-500 transition-all duration-300" style="width: 10%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Canvas Stage + Instant Principle Card -->
+      <div class="lg:col-span-7 space-y-4">
+        <div class="kid-card bg-slate-900 border-4 border-indigo-400 overflow-hidden relative">
+          <!-- Stage Header Bar -->
+          <div class="bg-indigo-950/90 px-4 py-2.5 flex items-center justify-between border-b border-indigo-800">
+            <div class="flex items-center gap-2">
+              <span id="stageEmoji" class="text-xl">🌋</span>
+              <h3 id="stageTitle" class="font-black text-white text-sm sm:text-base">彩虹火山實驗台</h3>
+            </div>
+            <span id="stageHint" class="text-xs font-bold text-amber-300 bg-indigo-900/90 px-2.5 py-1 rounded-full">
+              👆 點擊或拖曳畫面試試看！
+            </span>
+          </div>
+
+          <!-- Responsive Canvas Container -->
+          <div id="canvasContainer" class="relative w-full h-80 sm:h-96 bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900">
+            <canvas aria-label="互動實驗動畫；也可使用旁邊的操作按鈕" id="simCanvas" class="w-full h-full block cursor-pointer"></canvas>
+          </div>
+        </div>
+
+        <div id="observationPanel" class="kid-card bg-white p-4"></div>
+        <!-- Discovery / What Happened Card -->
+        <div class="kid-card bg-gradient-to-r from-amber-50 to-emerald-50 border-4 border-emerald-300 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div class="space-y-1">
+            <div class="flex items-center gap-1.5">
+              <span class="text-lg">🔍</span>
+              <span class="font-black text-emerald-950 text-sm sm:text-base">小小科學家的放大鏡</span>
+            </div>
+            <p id="labPrincipleText" aria-live="polite" class="text-sm font-bold text-slate-700 leading-relaxed"></p>
+          </div>
+          <button id="speakPrincipleBtn" type="button" class="kid-btn shrink-0 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xs sm:text-sm px-3.5 py-2.5 flex items-center gap-1.5">
+            <span>🔊</span>
+            <span>聽原理解說</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 2: REAL-WORLD HANDS-ON STEPS ==================== -->
+    <section id="view-steps" class="hidden space-y-5">
+      <div id="exampleVideo" aria-label="實驗示範影片"></div>
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
+        <!-- Materials Preparation Card -->
+        <div class="md:col-span-5 kid-card bg-white border-4 border-amber-300 p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="font-black text-lg text-amber-950 flex items-center gap-2">
+              <span class="text-2xl">🧺</span>
+              <span>準備家裡的小材料</span>
+            </h2>
+            <span class="text-xs font-extrabold bg-amber-100 text-amber-900 px-2.5 py-1 rounded-full">點一下打勾 ✅</span>
+          </div>
+          <p class="text-xs sm:text-sm font-bold text-slate-600">和爸爸媽媽一起到廚房找找看，找到一樣就點一下打勾喔！</p>
+          <div id="materialsChecklist" class="space-y-2.5"></div>
+
+          <!-- Safety Reminder Box -->
+          <div class="bg-rose-50 border-2 border-rose-300 rounded-2xl p-3.5 space-y-1">
+            <div class="font-black text-rose-900 text-sm flex items-center gap-1.5">
+              <span>🛡️</span>
+              <span>小小科學家安全約定</span>
+            </div>
+            <p id="safetyReminderText" class="text-xs sm:text-sm font-bold text-rose-800 leading-relaxed"></p>
+          </div>
+        </div>
+
+        <!-- Step-by-Step Interactive Guide -->
+        <div class="md:col-span-7 kid-card bg-white border-4 border-sky-300 p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="font-black text-lg text-sky-950 flex items-center gap-2">
+              <span class="text-2xl">👣</span>
+              <span>跟著步驟一步一步做</span>
+            </h2>
+            <button id="speakStepsBtn" type="button" class="kid-btn bg-sky-100 hover:bg-sky-200 text-sky-900 border-2 border-sky-300 px-3 py-1.5 text-xs sm:text-sm font-extrabold flex items-center gap-1">
+              <span>🗣️</span>
+              <span>朗讀全部步驟</span>
+            </button>
+          </div>
+
+          <div id="realWorldStepsList" class="space-y-3"></div>
+
+          <div class="pt-2 flex flex-wrap items-center justify-between gap-3 border-t-2 border-slate-100">
+            <p class="text-xs sm:text-sm font-bold text-slate-600">在家也完成實驗了嗎？可以回顧問題，再和大人分享你的發現。</p>
+            <button id="goToQuizFromStepsBtn" type="button" class="kid-btn bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm px-4 py-2.5 flex items-center gap-1.5">
+              <span>前往秘密小問答</span>
+              <span>➡️</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 3: SCIENCE QUIZ & BADGE UNLOCK ==================== -->
+    <section id="view-quiz" class="hidden">
+      <div class="kid-card bg-white border-4 border-purple-300 p-5 sm:p-7 max-w-3xl mx-auto space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <span class="text-3xl">🎓</span>
+            <div>
+              <h2 id="quizHeaderTitle" class="font-black text-lg sm:text-xl text-purple-950">科學腦力大挑戰</h2>
+              <p class="text-xs sm:text-sm font-bold text-slate-500">猜錯也沒關係！回想你看到的現象，再試一次。</p>
+            </div>
+          </div>
+          <button id="speakQuizBtn" type="button" class="kid-btn bg-purple-100 hover:bg-purple-200 border-2 border-purple-300 text-purple-900 font-extrabold px-3.5 py-2 text-xs sm:text-sm flex items-center gap-1.5">
+            <span>🔊</span>
+            <span>聽題目</span>
+          </button>
+        </div>
+
+        <div class="bg-purple-50 border-2 border-purple-200 rounded-2xl p-4 sm:p-5">
+          <p id="quizQuestionText" class="text-base sm:text-lg font-black text-slate-800 leading-relaxed"></p>
+        </div>
+
+        <div id="quizOptionsList" class="grid grid-cols-1 gap-3"></div>
+
+        <div id="quizResultBox" class="hidden rounded-2xl p-4 border-2 space-y-3">
+          <p id="quizResultText" class="font-extrabold text-sm sm:text-base leading-relaxed"></p>
+          <div class="flex flex-wrap gap-2">
+            <button id="nextExpAfterQuizBtn" type="button" class="kid-btn bg-amber-400 hover:bg-amber-500 text-slate-900 font-black text-sm px-4 py-2.5 flex items-center gap-1.5">
+              <span>🚀 玩下一個科學實驗</span>
+            </button>
+            <button id="viewBadgesAfterQuizBtn" type="button" class="kid-btn bg-white hover:bg-slate-50 text-slate-800 border-2 border-slate-300 font-extrabold text-sm px-4 py-2.5">
+              <span>🏅 查看我的徽章本</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div></main>
+
+  <!-- ==================== MODAL 1: BADGE PASSPORT ==================== -->
+  <div id="passportModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="kid-card bg-white border-4 border-amber-400 max-w-lg w-full p-5 sm:p-6 space-y-4 pop-in">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-3xl">🏅</span>
+          <div>
+            <h3 class="font-black text-xl text-slate-900">小小科學家榮譽徽章本</h3>
+            <p class="text-xs font-bold text-slate-500">完成觀察並收下發現，就能收集探索徽章！</p>
+          </div>
+        </div>
+        <button id="closePassportBtn" type="button" class="kid-btn bg-slate-100 hover:bg-slate-200 text-slate-700 font-black px-3 py-1.5 text-sm">
+          ✕ 關閉
+        </button>
+      </div>
+
+      <div id="passportGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+
+      <div id="passportCertificateBox" class="bg-amber-50 border-2 border-amber-300 rounded-2xl p-3.5 text-center space-y-1">
+        <p id="passportSummaryText" class="font-extrabold text-sm text-amber-900"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 2: PARENT GUIDE ==================== -->
+  <div id="parentModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="kid-card bg-white border-4 border-emerald-400 max-w-xl w-full p-5 sm:p-6 space-y-4 pop-in max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-3xl">👨‍👩‍👧</span>
+          <div>
+            <h3 class="font-black text-xl text-emerald-950">爸媽陪伴引導小錦囊</h3>
+            <p class="text-xs font-bold text-slate-500">專為 5–7 歲幼兒感官探索與STEAM啟蒙設計</p>
+          </div>
+        </div>
+        <button id="closeParentModalBtn" type="button" class="kid-btn bg-slate-100 hover:bg-slate-200 text-slate-700 font-black px-3 py-1.5 text-sm">
+          ✕ 關閉
+        </button>
+      </div>
+
+      <div class="space-y-3 text-sm text-slate-700 leading-relaxed">
+        <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-3.5 space-y-1.5">
+          <div class="font-black text-emerald-900">💡 為什麼 5–7 歲適合「預測 → 觀察 → 解釋」？</div>
+          <p class="font-medium">
+            5–7 歲孩子正處於具體運思期萌芽階段，最喜歡看到「立即可見的變化」（冒泡、浮起、色彩擴散、吸引跳動）。先讓孩子在 App 裡猜一猜、動手點點看，再一起到廚房用真實材料操作，能大幅加深記憶與好奇心！
+          </p>
+        </div>
+
+        <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-3.5 space-y-2">
+          <div class="font-black text-amber-900">🗣️ 本實驗推薦問孩子的 3 個啟發問題：</div>
+          <ul id="parentQuestionsList" class="list-disc pl-5 space-y-1 font-bold text-slate-800"></ul>
+        </div>
+
+        <div class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-3.5 space-y-1">
+          <div class="font-black text-sky-900">🧹 居家防髒亂小撇步：</div>
+          <p id="parentCleanupTip" class="font-medium text-slate-800"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastBanner" class="fixed bottom-5 right-5 z-50 hidden bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl border-2 border-amber-400 font-extrabold text-sm flex items-center gap-2">
+    <span id="toastEmoji" class="text-xl">🌟</span>
+    <span id="toastText">獲得徽章！</span>
+  </div>
+
+  <script src="app.js"></script><script src="discovery.js"></script><script src="more-topics.js"></script><script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});</script>
+</body>
+</html>
