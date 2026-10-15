@@ -25,7 +25,7 @@
 
 ## 檔案
 `index.html` 為頁面骨架；`app.js` 為親子實驗；`discovery.js` 為消化與天氣；`more-topics.js` 為器官、月相與潮汐。
-`physics.js` 為天氣延伸、光影與聲音；`ice.js` 為冰品科學；`swim.js` 為游泳與水的科學；`explore.js` 為分類導覽與今日探索；`body-stories.js` 為血液與頭髮單元。
+`physics.js` 為天氣延伸、光影與聲音；`ice.js` 為冰品科學；`swim.js` 為游泳與水的科學；`explore.js` 為分類導覽與今日探索；`body-stories.js` 為血液與頭髮資料；`body-cinema.js` 為四步過程動畫、播放控制、毛囊分段生長與深入問答。
 `style.css` 為介面樣式，`utilities.css` 為已產生的工具樣式。
 `sw.js` 提供離線快取，更新網站時請遞增其中的快取版本。
 
