@@ -11,20 +11,27 @@ var HAN=/[\u3400-\u9fff]/;
 function norm(t){return String(t==null?'':t).replace(/\s+/g,' ').trim()}
 function clean(p){return p.replace(/^[\s，、：:·\-—]+|[\s，、：:·\-—]+$/g,'')}
 function pieces(s){var out=[],buf='';for(var i=0;i<s.length;i++){var c=s[i];buf+=c;if('。！？!?；'.indexOf(c)>=0){out.push(buf.trim());buf=''}}if(buf.trim())out.push(buf.trim());return out}
-var manifestTimer;
-var manifestRequest=fetch(BASE+'manifest.json?v='+VER).then(function(response){
- if(response.ok===false)throw new Error('Voice manifest unavailable');
- return response.json();
-});
-var manifestDeadline=new Promise(function(resolve){
- manifestTimer=setTimeout(function(){resolve({})},3000);
-});
-var mapReady=Promise.race([manifestRequest,manifestDeadline]).catch(function(){return {}}).then(function(manifest){
- clearTimeout(manifestTimer);
- map=manifest&&manifest.clips||{};
- eager=manifest&&Array.isArray(manifest.eager)?manifest.eager:[];
- if(ctx)warm();
-});
+var mapReady=null;
+function loadManifest(){
+ if(map)return Promise.resolve();
+ if(mapReady)return mapReady;
+ var timer,controller=window.AbortController?new window.AbortController():null;
+ var request=fetch(BASE+'manifest.json?v='+VER,controller?{signal:controller.signal}:undefined).then(function(response){
+  if(response.ok===false)throw new Error('Voice manifest unavailable');
+  return response.json();
+ });
+ var deadline=new Promise(function(resolve){
+  timer=setTimeout(function(){resolve(null);if(controller)controller.abort()},3000);
+ });
+ mapReady=Promise.race([request,deadline]).then(function(manifest){
+  if(!manifest||!manifest.clips||typeof manifest.clips!=='object')return;
+  map=manifest.clips;
+  eager=Array.isArray(manifest.eager)?manifest.eager:[];
+  if(ctx)warm();
+ }).catch(function(){}).finally(function(){clearTimeout(timer);mapReady=null});
+ return mapReady;
+}
+loadManifest();
 function url(f){return BASE+f+'?v='+VER}
 function load(f){if(buffers[f])return Promise.resolve(buffers[f]);if(!ctx)return Promise.reject();if(!loading[f])loading[f]=fetch(url(f)).then(function(r){if(!r.ok)throw 0;return r.arrayBuffer()}).then(function(b){return new Promise(function(ok,no){ctx.decodeAudioData(b,ok,no)})}).then(function(b){buffers[f]=b;return b}).catch(function(e){delete loading[f];throw e});return loading[f]}
 function warm(){if(warmed||!map)return;warmed=true;var list=eager.slice(),i=0;function next(){if(i>=list.length)return;load(list[i++]).catch(function(){}).then(next)}for(var k=0;k<4;k++)next()}
@@ -92,7 +99,7 @@ function pump(){
  var item=queue.shift();
  cur=item;
  if(!map&&isChinese(item.u)){
-  mapReady.then(function(){if(cur===item)playItem(item)});
+  loadManifest().then(function(){if(cur===item)playItem(item)});
  }else playItem(item);
 }
 function playItem(item){
@@ -111,6 +118,6 @@ synth.cancel=function(){var q=queue,c=cur;queue=[];cur=null;if(stopCur){stopCur(
 function g(n){var d=Object.getOwnPropertyDescriptor(proto,n);return d&&d.get?d.get.call(synth):false}
 try{Object.defineProperty(synth,'speaking',{configurable:true,get:function(){return (!!cur&&!cur.native)||g('speaking')}})}catch(e){}
 try{Object.defineProperty(synth,'pending',{configurable:true,get:function(){return queue.length>0||g('pending')}})}catch(e){}
-window.NaturalVoice={version:VER,ready:mapReady,unlock:unlock,has:function(t){return !!lookup({text:t,lang:'zh-TW'})},buffers:buffers};
+window.NaturalVoice={version:VER,get ready(){return loadManifest()},unlock:unlock,has:function(t){return !!lookup({text:t,lang:'zh-TW'})},buffers:buffers};
 })();
 
